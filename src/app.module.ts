@@ -7,11 +7,15 @@ import { PrismaModule } from '#/infrastructure/prisma/prisma.module';
 import { AuthModule } from '#/presentation/modules/auth.module';
 import { ProductModule } from '#/presentation/modules/product.module';
 import { ReviewModule } from '#/presentation/modules/review.module';
+import { CartModule } from '#/presentation/modules/cart.module';
+import { OrderModule } from '#/presentation/modules/order.module';
 
 const modules = [
   AuthModule,
   ProductModule,
   ReviewModule,
+  CartModule,
+  OrderModule,
 ];
 
 @Module({
@@ -24,7 +28,7 @@ const modules = [
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET') || 'default-secret-key', /// я хз лол, но тут не работает ключ из env...
+        secret: configService.get<string>('JWT_SECRET') || 'default-secret-key',
         signOptions: { expiresIn: '30d' },
       }),
     }),
