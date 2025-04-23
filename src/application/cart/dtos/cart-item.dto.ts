@@ -1,9 +1,9 @@
-import { CartItem } from '#/domain/entities/cart/cart-item.entity';
+import { CartItem } from "#/domain/entities/cart/cart-item.entity";
 
 export class CartItemDto {
   productId: number;
   quantity: number;
-  price: number; // Цена на момент добавления
+  price: number;
 
   static fromEntity(item: CartItem): CartItemDto {
     const dto = new CartItemDto();

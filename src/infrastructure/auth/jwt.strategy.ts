@@ -1,10 +1,10 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
+import { Injectable, Inject } from "@nestjs/common";
+import { PassportStrategy } from "@nestjs/passport";
+import { ExtractJwt, Strategy } from "passport-jwt";
 
-import { USER_REPOSITORY } from '#/domain/repositories/tokens';
-import { IUserRepository } from '#/domain/repositories/user.repository.interface';
-import { User } from '#/domain/entities/user.entity';
+import { USER_REPOSITORY } from "#/domain/repositories/tokens";
+import { IUserRepository } from "#/domain/repositories/user.repository.interface";
+import { User } from "#/domain/entities/user.entity";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET || 'default-secret-key',
+      secretOrKey: process.env.JWT_SECRET || "default-secret-key",
     });
   }
 

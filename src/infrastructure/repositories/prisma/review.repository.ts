@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '#/infrastructure/prisma/prisma.service';
-import { IReviewRepository } from '#/domain/repositories/review.repository.interface';
-import { Review } from '#/domain/entities/review.entity';
-import { User } from '#/domain/entities/user.entity';
-import { Product } from '#/domain/entities/product.entity';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "#/infrastructure/prisma/prisma.service";
+import { IReviewRepository } from "#/domain/repositories/review.repository.interface";
+import { Review } from "#/domain/entities/review.entity";
+import { User } from "#/domain/entities/user.entity";
+import { Product } from "#/domain/entities/product.entity";
 
 @Injectable()
 export class PrismaReviewRepository implements IReviewRepository {
@@ -37,7 +37,7 @@ export class PrismaReviewRepository implements IReviewRepository {
       },
     });
 
-    return reviews.map(review => {
+    return reviews.map((review) => {
       const user = User.fromPersistence(review.user);
       const product = Product.fromPersistence(review.product);
       return Review.fromPersistence(review, user, product);
@@ -53,7 +53,7 @@ export class PrismaReviewRepository implements IReviewRepository {
       },
     });
 
-    return reviews.map(review => {
+    return reviews.map((review) => {
       const user = User.fromPersistence(review.user);
       const product = Product.fromPersistence(review.product);
       return Review.fromPersistence(review, user, product);

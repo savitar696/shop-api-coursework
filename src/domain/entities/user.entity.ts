@@ -9,14 +9,7 @@ export class User {
   ) {}
 
   static create(email: string, password: string, name: string): User {
-    return new User(
-      undefined,
-      email,
-      password,
-      name,
-      new Date(),
-      new Date(),
-    );
+    return new User(undefined, email, password, name, new Date(), new Date());
   }
 
   static fromPersistence(data: any): User {

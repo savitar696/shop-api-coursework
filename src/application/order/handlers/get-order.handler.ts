@@ -1,13 +1,14 @@
-import { QueryHandler, IQueryHandler } from '@nestjs/cqrs';
-import { Inject, NotFoundException, ForbiddenException } from '@nestjs/common';
-import { IOrderRepository } from '#/domain/repositories/order.repository';
-import { GetOrderQuery } from '../queries/get-order.query';
-import { OrderDto } from '../dtos/order.dto';
+import { QueryHandler, IQueryHandler } from "@nestjs/cqrs";
+import { Inject, NotFoundException, ForbiddenException } from "@nestjs/common";
+import { IOrderRepository } from "#/domain/repositories/order.repository";
+import { GetOrderQuery } from "../queries/get-order.query";
+import { OrderDto } from "../dtos/order.dto";
 
 @QueryHandler(GetOrderQuery)
 export class GetOrderHandler implements IQueryHandler<GetOrderQuery> {
   constructor(
-    @Inject(IOrderRepository) private readonly orderRepository: IOrderRepository,
+    @Inject(IOrderRepository)
+    private readonly orderRepository: IOrderRepository,
   ) {}
 
   async execute(query: GetOrderQuery): Promise<OrderDto> {
@@ -18,9 +19,8 @@ export class GetOrderHandler implements IQueryHandler<GetOrderQuery> {
       throw new NotFoundException(`Order with ID ${orderId} not found`);
     }
 
-    // Если userId передан (например, из JWT), проверяем, принадлежит ли заказ этому пользователю
     if (userId && order.userId !== userId) {
-      throw new ForbiddenException('Access denied');
+      throw new ForbiddenException("Access denied");
     }
 
     return OrderDto.fromEntity(order);

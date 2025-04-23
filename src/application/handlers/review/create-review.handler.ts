@@ -1,15 +1,21 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { NotFoundException, Inject } from '@nestjs/common';
+import { CommandHandler, ICommandHandler } from "@nestjs/cqrs";
+import { NotFoundException, Inject } from "@nestjs/common";
 
-import { CreateReviewCommand } from '#/application/commands/review/create-review.command';
-import { REVIEW_REPOSITORY, USER_REPOSITORY, PRODUCT_REPOSITORY } from '#/domain/repositories/tokens';
-import { IReviewRepository } from '#/domain/repositories/review.repository.interface';
-import { IUserRepository } from '#/domain/repositories/user.repository.interface';
-import { IProductRepository } from '#/domain/repositories/product.repository.interface';
-import { Review } from '#/domain/entities/review.entity';
+import { CreateReviewCommand } from "#/application/commands/review/create-review.command";
+import {
+  REVIEW_REPOSITORY,
+  USER_REPOSITORY,
+  PRODUCT_REPOSITORY,
+} from "#/domain/repositories/tokens";
+import { IReviewRepository } from "#/domain/repositories/review.repository.interface";
+import { IUserRepository } from "#/domain/repositories/user.repository.interface";
+import { IProductRepository } from "#/domain/repositories/product.repository.interface";
+import { Review } from "#/domain/entities/review.entity";
 
 @CommandHandler(CreateReviewCommand)
-export class CreateReviewHandler implements ICommandHandler<CreateReviewCommand> {
+export class CreateReviewHandler
+  implements ICommandHandler<CreateReviewCommand>
+{
   constructor(
     @Inject(REVIEW_REPOSITORY)
     private readonly reviewRepository: IReviewRepository,
@@ -22,12 +28,12 @@ export class CreateReviewHandler implements ICommandHandler<CreateReviewCommand>
   async execute(command: CreateReviewCommand): Promise<Review> {
     const user = await this.userRepository.findById(command.userId);
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException("User not found");
     }
 
     const product = await this.productRepository.findById(command.productId);
     if (!product) {
-      throw new NotFoundException('Product not found');
+      throw new NotFoundException("Product not found");
     }
 
     const review = Review.create(

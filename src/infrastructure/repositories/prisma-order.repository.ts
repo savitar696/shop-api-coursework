@@ -1,16 +1,21 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '#/infrastructure/prisma/prisma.service';
-import { IOrderRepository } from '#/domain/repositories/order.repository';
-import { Order, OrderStatus as DomainOrderStatus } from '#/domain/entities/order/order.entity';
-import { Prisma } from '@prisma/client';
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "#/infrastructure/prisma/prisma.service";
+import { IOrderRepository } from "#/domain/repositories/order.repository";
+import {
+  Order,
+  OrderStatus as DomainOrderStatus,
+} from "#/domain/entities/order/order.entity";
+import { OrderItem } from "#/domain/entities/order/order-item.entity";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class PrismaOrderRepository implements IOrderRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  // TODO: Добавить маппинг OrderItem, если используется
-  private mapToDomain(prismaOrder: Prisma.OrderGetPayload<{ include: { items: { include: { product: true } } } }>): Order {
-    // const items = prismaOrder.items.map(item => ...);
+  private mapToDomain(
+    prismaOrder: Prisma.OrderGetPayload<{ include: { items: true } }>,
+  ): Order {
+    const items = prismaOrder.items.map(OrderItem.fromPersistence);
     return new Order(
       prismaOrder.id,
       prismaOrder.userId,
@@ -18,15 +23,15 @@ export class PrismaOrderRepository implements IOrderRepository {
       DomainOrderStatus[prismaOrder.status],
       prismaOrder.createdAt,
       prismaOrder.updatedAt,
+      items,
       prismaOrder.shippingAddress,
-      // items,
     );
   }
 
   async findById(id: number): Promise<Order | null> {
     const prismaOrder = await this.prisma.order.findUnique({
       where: { id },
-      include: { items: { include: { product: true } } }, // Включаем элементы и продукты в них
+      include: { items: true },
     });
     return prismaOrder ? this.mapToDomain(prismaOrder) : null;
   }
@@ -34,26 +39,46 @@ export class PrismaOrderRepository implements IOrderRepository {
   async findByUserId(userId: number): Promise<Order[]> {
     const prismaOrders = await this.prisma.order.findMany({
       where: { userId },
-      include: { items: { include: { product: true } } },
-      orderBy: { createdAt: 'desc' }, // Сортируем по убыванию даты создания
+      include: { items: true },
+      orderBy: { createdAt: "desc" },
     });
     return prismaOrders.map(this.mapToDomain);
   }
 
   async save(order: Order): Promise<Order> {
-    const { id, userId, totalAmount, status, createdAt, updatedAt, shippingAddress } = order;
-    // const itemsData = order.items.map(item => ({...})); // TODO: Подготовить данные для OrderItem
+    const {
+      id,
+      userId,
+      totalAmount,
+      status,
+      createdAt,
+      updatedAt,
+      shippingAddress,
+      items,
+    } = order;
 
-    const orderData: Prisma.OrderUpdateInput | Prisma.OrderCreateInput = {
+    const itemsData = items.map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+      price: item.price,
+    }));
+
+    const orderData:
+      | (Omit<Prisma.OrderUpdateInput, "items"> & {
+          items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput;
+        })
+      | (Omit<Prisma.OrderCreateInput, "items"> & {
+          items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput;
+        }) = {
       user: { connect: { id: userId } },
       totalAmount: totalAmount,
       status: status,
       shippingAddress: shippingAddress,
       createdAt: createdAt,
-      updatedAt: updatedAt, // Prisma обновит автоматически при update
-      items: { // TODO: Реализовать сохранение OrderItem
-        // deleteMany: { orderId: id },
-        // create: itemsData,
+      updatedAt: updatedAt,
+      items: {
+        deleteMany: { orderId: id ?? -1 },
+        create: itemsData,
       },
     };
 
@@ -62,12 +87,12 @@ export class PrismaOrderRepository implements IOrderRepository {
       create: {
         userId,
         totalAmount,
-        status: status,
+        status,
         shippingAddress,
-        items: (orderData as any).items, // TODO: Проверить/исправить
+        items: { create: itemsData },
       },
       update: orderData as Prisma.OrderUpdateInput,
-      include: { items: { include: { product: true } } },
+      include: { items: true },
     });
 
     return this.mapToDomain(prismaOrder);

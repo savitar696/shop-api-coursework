@@ -1,14 +1,23 @@
-import { Order, OrderStatus } from '#/domain/entities/order/order.entity';
-// import { OrderItemDto } from './order-item.dto'; // Если будет OrderItem
+import { Order, OrderStatus } from "#/domain/entities/order/order.entity";
+import { OrderItemDto } from "./order-item.dto";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class OrderDto {
+  @ApiProperty()
   id: number;
+  @ApiProperty()
   userId: number;
-  // items: OrderItemDto[]; // Детали заказа
+  @ApiProperty({ type: () => [OrderItemDto] })
+  items: OrderItemDto[];
+  @ApiProperty()
   totalAmount: number;
+  @ApiProperty({ enum: OrderStatus })
   status: OrderStatus;
+  @ApiProperty()
   createdAt: Date;
+  @ApiProperty()
   updatedAt: Date;
+  @ApiProperty({ required: false, nullable: true })
   shippingAddress?: string;
 
   static fromEntity(order: Order): OrderDto {
@@ -20,7 +29,7 @@ export class OrderDto {
     dto.createdAt = order.createdAt;
     dto.updatedAt = order.updatedAt;
     dto.shippingAddress = order.shippingAddress;
-    // dto.items = order.items.map(OrderItemDto.fromEntity); // Если будет OrderItem
+    dto.items = order.items.map(OrderItemDto.fromEntity);
     return dto;
   }
 }

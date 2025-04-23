@@ -1,3 +1,5 @@
+import { Category } from "./category.entity";
+
 export class Product {
   private constructor(
     public readonly id: number | undefined,
@@ -8,12 +10,15 @@ export class Product {
     public readonly rating: number,
     public readonly createdAt: Date,
     public readonly updatedAt: Date,
+    public readonly categoryId: number,
+    public readonly category?: Category,
   ) {}
 
   static create(
     name: string,
     description: string,
     price: number,
+    categoryId: number,
     image?: string,
   ): Product {
     return new Product(
@@ -25,6 +30,7 @@ export class Product {
       0,
       new Date(),
       new Date(),
+      categoryId,
     );
   }
 
@@ -38,6 +44,8 @@ export class Product {
       data.rating,
       data.createdAt,
       data.updatedAt,
+      data.categoryId,
+      data.category ? Category.fromPersistence(data.category) : undefined,
     );
   }
 

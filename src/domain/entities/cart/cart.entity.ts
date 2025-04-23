@@ -1,4 +1,4 @@
-import { CartItem } from './cart-item.entity';
+import { CartItem } from "./cart-item.entity";
 
 export class Cart {
   id: number;
@@ -20,10 +20,4 @@ export class Cart {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
-
-  // Можно добавить методы для управления корзиной, например:
-  // addItem(item: CartItem): void { ... }
-  // removeItem(productId: number): void { ... }
-  // updateItemQuantity(productId: number, quantity: number): void { ... }
-  // calculateTotal(): number { ... }
 }

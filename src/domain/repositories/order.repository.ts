@@ -1,6 +1,6 @@
-import { Order } from '../entities/order/order.entity';
+import { Order } from "../entities/order/order.entity";
 
-export const IOrderRepository = Symbol('IOrderRepository');
+export const IOrderRepository = Symbol("IOrderRepository");
 
 export interface IOrderRepository {
   findById(id: number): Promise<Order | null>;

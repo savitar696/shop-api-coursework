@@ -1,0 +1,90 @@
+/* public/css/swagger-dark.css */
+body {
+  background-color: #282c34;
+  color: #abb2bf;
+}
+.swagger-ui .topbar {
+  background-color: #21252b;
+  border-bottom: 1px solid #3a404c;
+}
+.swagger-ui .topbar .download-url-wrapper input[type=text],
+.swagger-ui .topbar .download-url-wrapper .download-url-button {
+  background: #3a404c;
+  color: #abb2bf;
+  border: 1px solid #5c6370;
+}
+.swagger-ui .scheme-container {
+  background: #21252b;
+  box-shadow: 0 1px 2px rgba(0,0,0,.5);
+}
+.swagger-ui .opblock-tag {
+  color: #61afef;
+  border-bottom: 1px solid #3a404c;
+}
+.swagger-ui .opblock-tag small {
+    color: #98c379;
+}
+.swagger-ui .opblock {
+  background: #2c313a;
+  border-color: #3a404c;
+  box-shadow: 0 1px 2px rgba(0,0,0,.4);
+}
+.swagger-ui .opblock .opblock-summary-method {
+  background: #61afef; /* Синий для GET */
+}
+.swagger-ui .opblock.opblock-post .opblock-summary-method {
+  background: #98c379; /* Зеленый для POST */
+}
+.swagger-ui .opblock.opblock-put .opblock-summary-method {
+  background: #e5c07b; /* Желтый для PUT */
+}
+.swagger-ui .opblock.opblock-patch .opblock-summary-method {
+  background: #c678dd; /* Фиолетовый для PATCH */
+}
+.swagger-ui .opblock.opblock-delete .opblock-summary-method {
+  background: #e06c75; /* Красный для DELETE */
+}
+.swagger-ui .opblock .opblock-summary-path, .swagger-ui .opblock .opblock-summary-description {
+  color: #abb2bf;
+}
+.swagger-ui .opblock .opblock-summary-path a {
+   color: #56b6c2;
+}
+.swagger-ui table thead tr td, .swagger-ui table thead tr th {
+  border-bottom: 1px solid #3a404c;
+  color: #e5c07b;
+}
+.swagger-ui .response-col_status {
+    color: #98c379;
+}
+.swagger-ui .parameter__type, .swagger-ui .parameter__name {
+    color: #abb2bf;
+}
+.swagger-ui .parameter__name.required:after {
+    color: #e06c75;
+}
+.swagger-ui .parameters-col_description p {
+    color: #abb2bf;
+}
+.swagger-ui input[type=text], .swagger-ui input[type=password], .swagger-ui textarea, .swagger-ui select {
+    background: #3a404c;
+    border: 1px solid #5c6370;
+    color: #abb2bf;
+}
+.swagger-ui .btn {
+    border-color: #61afef;
+    color: #61afef;
+}
+.swagger-ui .btn.execute {
+    background-color: #61afef;
+    color: #21252b;
+}
+.swagger-ui .response-control-media-type__accept-message {
+    color: #abb2bf;
+}
+.swagger-ui .responses-inner>div>h4, .swagger-ui .responses-inner>div>h5 {
+   color: #e5c07b;
+}
+.swagger-ui .response-col_description__inner>div>p {
+   color: #abb2bf;
+}

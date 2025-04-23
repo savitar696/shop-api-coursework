@@ -1,25 +1,23 @@
-// import { User } from '../user/user.entity'; // Если нужно будет связать
-// import { OrderItem } from './order-item.entity'; // Аналогично
+import { User } from "#/domain/entities/user.entity";
+import { OrderItem } from "./order-item.entity";
 
 export enum OrderStatus {
-  PENDING = 'PENDING',         // Ожидает оплаты
-  PROCESSING = 'PROCESSING',   // В обработке
-  SHIPPED = 'SHIPPED',         // Отправлен
-  DELIVERED = 'DELIVERED',     // Доставлен
-  CANCELLED = 'CANCELLED',     // Отменен
+  PENDING = "PENDING",
+  PROCESSING = "PROCESSING",
+  SHIPPED = "SHIPPED",
+  DELIVERED = "DELIVERED",
+  CANCELLED = "CANCELLED",
 }
 
 export class Order {
   id: number;
   userId: number;
-  // user: User;
-  // items: OrderItem[]; // Товары заказа (создать OrderItem entity)
+  items: OrderItem[];
   totalAmount: number;
   status: OrderStatus;
   createdAt: Date;
   updatedAt: Date;
-  shippingAddress?: string; // Добавляем адрес доставки
-  // Можно добавить адрес доставки, метод оплаты и т.д.
+  shippingAddress?: string;
 
   constructor(
     id: number,
@@ -28,9 +26,8 @@ export class Order {
     status: OrderStatus,
     createdAt: Date,
     updatedAt: Date,
-    shippingAddress?: string, // Добавляем в конструктор
-    // user: User,
-    // items: OrderItem[],
+    items: OrderItem[],
+    shippingAddress?: string,
   ) {
     this.id = id;
     this.userId = userId;
@@ -38,8 +35,21 @@ export class Order {
     this.status = status;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-    this.shippingAddress = shippingAddress; // Присваиваем значение
-    // this.user = user;
-    // this.items = items;
+    this.items = items;
+    this.shippingAddress = shippingAddress;
+  }
+
+  static fromPersistence(data: any): Order {
+    const items = data.items?.map(OrderItem.fromPersistence) ?? [];
+    return new Order(
+      data.id,
+      data.userId,
+      data.totalAmount,
+      data.status,
+      data.createdAt,
+      data.updatedAt,
+      items,
+      data.shippingAddress,
+    );
   }
 }
