@@ -6,20 +6,18 @@
 
 *   NestJS
 *   TypeScript
-*   DDD (принципы)
-*   CQRS (паттерн)
-*   Prisma (ORM)
-*   PostgreSQL (или другая БД)
-*   JWT (Аутентификация)
-*   Passport
-*   bcrypt (Хеширование паролей)
-*   class-validator / class-transformer (Валидация)
+*   CQRS
+*   Prisma
+*   PostgreSQL
+*   JWT
+*   bcrypt
+*   class-validator / class-transformer
 
 ## 📋 Требования
 
 *   Node.js (LTS)
 *   npm / yarn / pnpm
-*   PostgreSQL (или другая БД из `schema.prisma`)
+*   PostgreSQL
 
 ## 🚀 Установка
 
